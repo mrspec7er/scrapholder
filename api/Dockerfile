@@ -14,4 +14,4 @@ RUN chmod +x main
 
 EXPOSE 8080
 
-CMD go run ./main
+CMD ./main
