@@ -12,7 +12,7 @@ import (
 type Redis struct{}
 
 func (Redis) Client() *redis.Client {
-	redisAddress := "127.0.0.1:6379"
+	redisAddress := "memcache:6379"
 	redisUsername := "default"
 	redisPassword := ""
 	client := redis.NewClient(&redis.Options{

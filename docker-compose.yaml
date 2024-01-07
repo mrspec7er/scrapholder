@@ -1,0 +1,25 @@
+version: "3.8"
+
+services:
+  memcache:
+    build: ./redis
+    container_name: rd01
+    healthcheck:
+      test: ["CMD", "redis-cli", "--raw", "incr", "ping"]
+      interval: 5s
+      timeout: 25s
+      retries: 5
+
+  api:
+    depends_on:
+      memcache:
+        condition: service_healthy
+    build: ./api
+    container_name: api
+    volumes:
+      - assets:/api/assets
+    ports:
+      - 8080:8080
+
+volumes:
+  assets:
