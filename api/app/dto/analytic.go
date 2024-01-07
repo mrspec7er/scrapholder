@@ -45,3 +45,8 @@ type StockHistoryApiResponse struct {
 		Results []*StockHistory `json:"results"`
 	} `json:"data"`
 }
+
+type FundamentalAnalysis struct {
+	Statistic      []*Statistic
+	Recommendation []*Recommendation
+}

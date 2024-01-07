@@ -113,3 +113,12 @@ func (s AnalyticService) GetQuarterSupportResistance(histories []*dto.StockHisto
 
 	return dto.QuarterDetail{Price: supportPrice, Date: supportDate, Volume: supportVolume}, dto.QuarterDetail{Price: resistancePrice, Date: resistanceDate, Volume: resistanceVolume}
 }
+
+func (s AnalyticService) GetFundamentalAnalytic(symbol string) (*dto.FundamentalAnalysis, error) {
+	statistic, recommendation, err := s.Utils.InformationScrapper(symbol)
+
+	return &dto.FundamentalAnalysis{
+		Statistic:      statistic,
+		Recommendation: recommendation,
+	}, err
+}

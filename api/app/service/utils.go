@@ -16,19 +16,19 @@ type UtilService struct {
 	Redis repository.Redis
 }
 
-func (UtilService) InformationScrapper() {
+func (UtilService) InformationScrapper(symbol string) ([]*dto.Statistic, []*dto.Recommendation, error) {
 	c := colly.NewCollector(
 		colly.AllowedDomains("id.tradingview.com"),
 	)
 
-	statistic := make(map[string]string)
+	statistic := []*dto.Statistic{}
 
 	c.OnHTML(".block-GgmpMpKr", func(e *colly.HTMLElement) {
 
 		label := e.DOM.Find(".label-GgmpMpKr").Text()
 		value := e.DOM.Find(".value-GgmpMpKr").Contents().Not(".measureUnit-lQwbiR8R").Text()
 
-		statistic[label] = value
+		statistic = append(statistic, &dto.Statistic{Label: label, Value: value})
 
 	})
 
@@ -47,15 +47,12 @@ func (UtilService) InformationScrapper() {
 		fmt.Println("Visiting", r.URL.String())
 	})
 
-	c.Visit("https://id.tradingview.com/symbols/IDX-TLKM/")
-
-	for k, s := range statistic {
-		fmt.Println(k, ":", s)
+	err := c.Visit("https://id.tradingview.com/symbols/IDX-" + symbol + "/")
+	if err != nil {
+		return nil, nil, err
 	}
 
-	for _, r := range recommendation {
-		fmt.Println(*r)
-	}
+	return statistic, recommendation, nil
 }
 
 func (u UtilService) GetStockHistory(symbol string, fromDate string, toDate string) ([]*dto.StockHistory, error) {

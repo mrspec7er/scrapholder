@@ -63,6 +63,25 @@ var rootQuery = graphql.NewObject(graphql.ObjectConfig{
 				return result, nil
 			},
 		},
+
+		"fundamentalAnalytic": &graphql.Field{
+			Type: stockFundamentalType,
+			Args: graphql.FieldConfigArgument{
+				"symbol": &graphql.ArgumentConfig{
+					Type: graphql.NewNonNull(graphql.String),
+				},
+			},
+			Resolve: func(p graphql.ResolveParams) (interface{}, error) {
+				symbol := p.Args["symbol"].(string)
+
+				result, err := r.Analytic.GetFundamentalAnalytic(symbol)
+
+				if err != nil {
+					return nil, err
+				}
+				return result, nil
+			},
+		},
 	},
 })
 
@@ -134,6 +153,42 @@ var stockQuarterHistoriesType = graphql.NewObject(graphql.ObjectConfig{
 		},
 		"quarters": &graphql.Field{
 			Type: graphql.NewList(stockQuarterType),
+		},
+	},
+})
+
+var stockFundamentalType = graphql.NewObject(graphql.ObjectConfig{
+	Name: "StockFundamental",
+	Fields: graphql.Fields{
+		"statistic": &graphql.Field{
+			Type: graphql.NewList(stockStatisticType),
+		},
+		"recommendation": &graphql.Field{
+			Type: graphql.NewList(stockRecommendationType),
+		},
+	},
+})
+
+var stockStatisticType = graphql.NewObject(graphql.ObjectConfig{
+	Name: "StockStatistic",
+	Fields: graphql.Fields{
+		"label": &graphql.Field{
+			Type: graphql.String,
+		},
+		"value": &graphql.Field{
+			Type: graphql.String,
+		},
+	},
+})
+
+var stockRecommendationType = graphql.NewObject(graphql.ObjectConfig{
+	Name: "StockRecommendation",
+	Fields: graphql.Fields{
+		"title": &graphql.Field{
+			Type: graphql.String,
+		},
+		"body": &graphql.Field{
+			Type: graphql.String,
 		},
 	},
 })
