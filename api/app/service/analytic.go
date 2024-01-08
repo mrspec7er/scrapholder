@@ -45,7 +45,7 @@ func (s AnalyticService) GetQuarterAnalytic(symbol string, fromYear int) (dto.St
 
 func (s AnalyticService) GetQuarterHistories(symbol string, year int, ctx chan []*dto.QuarterHistory, wg *sync.WaitGroup) {
 	quarters := []*dto.QuarterHistory{}
-	histories, err := s.Utils.GetStockHistory(symbol, strconv.Itoa(year)+"-01-02", strconv.Itoa(year+1)+"-01-01")
+	histories, err := s.Utils.GetStockHistory(symbol, strconv.Itoa(year)+"-01-01", strconv.Itoa(year)+"-12-31")
 
 	dataLength := len(histories)
 
@@ -76,7 +76,7 @@ func (s AnalyticService) GetQuarterHistories(symbol string, year int, ctx chan [
 	Q3Low, Q3High := s.GetQuarterSupportResistance(histories, 125, 188)
 	quarters = append(quarters, &dto.QuarterHistory{Quarter: strconv.Itoa(year) + "-Q3", High: Q3High, Low: Q3Low})
 
-	if dataLength < 240 {
+	if dataLength < 200 {
 		wg.Done()
 		return
 	}
