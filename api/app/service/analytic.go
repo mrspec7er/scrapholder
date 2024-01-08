@@ -63,6 +63,7 @@ func (s AnalyticService) GetQuarterHistories(symbol string, year int, ctx chan [
 	quarters = append(quarters, &dto.QuarterHistory{Quarter: strconv.Itoa(year) + "-Q1", High: Q1High, Low: Q1Low})
 
 	if dataLength < 124 {
+		ctx <- quarters
 		wg.Done()
 		return
 	}
@@ -70,13 +71,15 @@ func (s AnalyticService) GetQuarterHistories(symbol string, year int, ctx chan [
 	quarters = append(quarters, &dto.QuarterHistory{Quarter: strconv.Itoa(year) + "-Q2", High: Q2High, Low: Q2Low})
 
 	if dataLength < 188 {
+		ctx <- quarters
 		wg.Done()
 		return
 	}
 	Q3Low, Q3High := s.GetQuarterSupportResistance(histories, 125, 188)
 	quarters = append(quarters, &dto.QuarterHistory{Quarter: strconv.Itoa(year) + "-Q3", High: Q3High, Low: Q3Low})
 
-	if dataLength < 200 {
+	if dataLength < 238 {
+		ctx <- quarters
 		wg.Done()
 		return
 	}
