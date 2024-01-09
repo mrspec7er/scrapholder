@@ -21,5 +21,13 @@ services:
     ports:
       - 8080:8080
 
+  proxy:
+    depends_on:
+      - api
+    build: ./nginx
+    container_name: proxy
+    ports:
+      - 8000:8000
+
 volumes:
   assets:
