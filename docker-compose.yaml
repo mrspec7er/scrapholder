@@ -18,8 +18,6 @@ services:
     container_name: api
     volumes:
       - assets:/api/assets
-    ports:
-      - 8080:8080
 
   proxy:
     depends_on:
