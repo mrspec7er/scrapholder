@@ -11,24 +11,24 @@ import (
 
 type Redis struct{}
 
-func (Redis) Client() *redis.Client {
+var memcache *redis.Client
+
+func RedisConnection() {
 	redisAddress := "memcache:6379"
 	redisUsername := "default"
 	redisPassword := ""
-	client := redis.NewClient(&redis.Options{
+	memcache = redis.NewClient(&redis.Options{
 		Addr:     redisAddress,
 		Password: redisPassword,
 		Username: redisUsername,
 		DB:       0,
 	})
-
-	return client
 }
 
-func (r Redis) Retrieve(key string, histories *[]*dto.StockHistory) error {
+func (r Redis) RetrieveHistories(key string, histories *[]*dto.StockHistory) error {
 	ctx := context.TODO()
 
-	historiesStringified, err := r.Client().Get(ctx, key).Result()
+	historiesStringified, err := memcache.Get(ctx, key).Result()
 
 	if err != nil {
 		return err
@@ -39,14 +39,14 @@ func (r Redis) Retrieve(key string, histories *[]*dto.StockHistory) error {
 	return nil
 }
 
-func (r Redis) CacheHistory(key string, data []*dto.StockHistory) error {
+func (r Redis) CacheHistories(key string, data []*dto.StockHistory) error {
 	ctx := context.TODO()
 	historiesStringified, err := json.Marshal(data)
 	if err != nil {
 		return err
 	}
 
-	err = r.Client().Set(ctx, key, historiesStringified, time.Hour).Err()
+	err = memcache.Set(ctx, key, historiesStringified, time.Hour).Err()
 
 	return err
 }

@@ -4,10 +4,13 @@ import (
 	"net/http"
 
 	"github.com/graphql-go/handler"
+	"github.com/mrspec7er/scrapholder/app/repository"
 	"github.com/mrspec7er/scrapholder/app/schema"
 )
 
 func main() {
+	repository.RedisConnection()
+
 	h := handler.New(&handler.Config{
 		Schema:   &schema.StockTechnicalAnalysisSchema,
 		Pretty:   true,

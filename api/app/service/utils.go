@@ -58,7 +58,7 @@ func (UtilService) InformationScrapper(symbol string) ([]*dto.Statistic, []*dto.
 func (u UtilService) GetStockHistory(symbol string, fromDate string, toDate string) ([]*dto.StockHistory, error) {
 	key := symbol + "-" + fromDate + "-" + toDate
 	result := []*dto.StockHistory{}
-	err := u.Redis.Retrieve(key, &result)
+	err := u.Redis.RetrieveHistories(key, &result)
 
 	if err != nil {
 		result, err = u.GoApiFetchData(symbol, fromDate, toDate)
@@ -67,7 +67,7 @@ func (u UtilService) GetStockHistory(symbol string, fromDate string, toDate stri
 			return nil, err
 		}
 
-		err := u.Redis.CacheHistory(key, result)
+		err := u.Redis.CacheHistories(key, result)
 		if err != nil {
 			fmt.Println(err)
 		}
