@@ -77,8 +77,8 @@ export default async function DetailAnalytic({
       <StockChart
         labels={labels}
         datasets={[
-          { data: supports, backgroundColor: "red" },
-          { data: resistances, backgroundColor: "green" },
+          { data: supports, borderColor: "red" },
+          { data: resistances, borderColor: "green" },
         ]}
       />
     </main>

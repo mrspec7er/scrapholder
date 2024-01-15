@@ -23,16 +23,20 @@ const StockChart = ({
   datasets,
 }: {
   labels: string[];
-  datasets: { data: number[]; backgroundColor: string }[];
+  datasets: { data: number[]; borderColor: string }[];
 }) => {
   return (
-    <div>
-      <Line
-        data={{
-          labels,
-          datasets,
-        }}
-      />
+    <div className="overflow-x-auto">
+      <div className="min-w-[50rem]">
+        <Line
+          width={200}
+          height={75}
+          data={{
+            labels,
+            datasets,
+          }}
+        />
+      </div>
     </div>
   );
 };
