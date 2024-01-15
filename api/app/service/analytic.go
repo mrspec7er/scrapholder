@@ -2,6 +2,7 @@ package service
 
 import (
 	"log"
+	"sort"
 	"strconv"
 	"sync"
 	"time"
@@ -32,6 +33,10 @@ func (s AnalyticService) GetQuarterAnalytic(symbol string, fromYear int) (dto.St
 	for quarter := range ctx {
 		quarters = append(quarters, quarter...)
 	}
+
+	sort.Slice(quarters, func(i, j int) bool {
+		return quarters[i].Quarter < quarters[j].Quarter
+	})
 
 	averageSupport := 0
 	averageResistance := 0
