@@ -1,6 +1,6 @@
 import { getClient } from "@/utils/client";
 import { gql } from "@apollo/client";
-import StockChart from "./components/stock-chart";
+import StockChart from "../components/stock-chart";
 
 const query = gql`
   query {
