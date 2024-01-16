@@ -2,6 +2,7 @@ import { getClient } from "@/utils/client";
 import { gql } from "@apollo/client";
 import StockChart from "../../components/stock-chart";
 import Search from "@/components/search";
+import QuarterReport from "@/components/quarter-report";
 
 interface Quarter {
   quarter: string;
@@ -75,7 +76,7 @@ async function QuarterAnalytic({
   });
 
   return (
-    <main>
+    <div>
       <div>
         <Search defaultYear={Number(fromYear)} defaultSymbol={symbol} />
       </div>
@@ -87,6 +88,8 @@ async function QuarterAnalytic({
         Average Support:{" "}
         {formatter.format(data.quarterHistories.averageSupport)}
       </p>
+
+      <QuarterReport symbol={symbol} />
       <StockChart
         labels={labels}
         datasets={[
@@ -94,7 +97,7 @@ async function QuarterAnalytic({
           { data: resistances, borderColor: "aquamarine" },
         ]}
       />
-    </main>
+    </div>
   );
 }
 
@@ -166,12 +169,12 @@ export default async function DetailAnalytic({
   searchParams?: { [key: string]: string };
 }) {
   return (
-    <>
+    <main>
       <QuarterAnalytic
         symbol={params.symbol}
         fromYear={searchParams!.fromYear}
       />
       <FundamentalAnalytic symbol={params.symbol} />
-    </>
+    </main>
   );
 }
