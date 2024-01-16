@@ -1,7 +1,7 @@
 import { getClient } from "@/utils/client";
 import { gql } from "@apollo/client";
 import StockChart from "../../components/stock-chart";
-import { useParams } from "next/navigation";
+import Search from "@/components/search";
 
 interface Quarter {
   quarter: string;
@@ -17,16 +17,16 @@ interface Quarter {
   };
 }
 
-export default async function DetailAnalytic({
-  params,
-  searchParams,
+async function QuarterAnalytic({
+  symbol,
+  fromYear,
 }: {
-  params: { symbol: string };
-  searchParams?: { [key: string]: string | string[] | undefined };
+  symbol: string;
+  fromYear: string;
 }) {
   const query = gql`
     query {
-      quarterHistories(fromYear: ${searchParams?.fromYear}, symbol: "${params.symbol}") {
+      quarterHistories(fromYear: ${fromYear}, symbol: "${symbol}") {
         averageSupport
         averageResistance
         quarters {
@@ -69,18 +69,109 @@ export default async function DetailAnalytic({
   const supports = data.quarterHistories.quarters.map((i) => i.low.price);
   const resistances = data.quarterHistories.quarters.map((i) => i.high.price);
 
+  const formatter = new Intl.NumberFormat("id-ID", {
+    style: "currency",
+    currency: "IDR",
+  });
+
   return (
     <main>
+      <div>
+        <Search defaultYear={Number(fromYear)} defaultSymbol={symbol} />
+      </div>
       <p>
-        {params.symbol}, {searchParams?.fromYear}
+        Average Resistance:{" "}
+        {formatter.format(data.quarterHistories.averageResistance)}
+      </p>
+      <p>
+        Average Support:{" "}
+        {formatter.format(data.quarterHistories.averageSupport)}
       </p>
       <StockChart
         labels={labels}
         datasets={[
-          { data: supports, borderColor: "red" },
-          { data: resistances, borderColor: "green" },
+          { data: supports, borderColor: "lightPink" },
+          { data: resistances, borderColor: "aquamarine" },
         ]}
       />
     </main>
+  );
+}
+
+async function FundamentalAnalytic({ symbol }: { symbol: string }) {
+  const query = gql`
+    query {
+      fundamentalAnalytic(symbol: "${symbol}"){
+        statistic{
+          label,
+          value
+        },
+        recommendation{
+          title,
+          body
+        }
+      }
+    }
+  `;
+
+  const {
+    data,
+  }: {
+    data: {
+      fundamentalAnalytic: {
+        statistic: { label: string; value: string }[];
+        recommendation: { title: string; body: string }[];
+      };
+    };
+  } = await getClient().query({
+    query,
+    context: {
+      fetchOptions: {
+        next: { revalidate: 50 },
+      },
+    },
+  });
+
+  return (
+    <div>
+      <div className="pt-12">
+        <p className="text-lg font-semibold">Statistic :</p>
+        {data.fundamentalAnalytic.statistic.map((s) => (
+          <div className="py-1" key={s.label}>
+            <p>
+              <span className="font-medium">{s.label}</span>: {s.value}
+            </p>
+          </div>
+        ))}
+      </div>
+      <div className="pt-12">
+        <p className="text-lg font-semibold">Recommendations :</p>
+
+        {data.fundamentalAnalytic.recommendation.map((s, i) => (
+          <div className="py-3" key={i}>
+            <p className="pb-1 font-medium">{s.title}</p>
+            <p>{s.body}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+export default async function DetailAnalytic({
+  params,
+  searchParams,
+}: {
+  params: { symbol: string };
+  searchParams?: { [key: string]: string };
+}) {
+  return (
+    <>
+      <QuarterAnalytic
+        symbol={params.symbol}
+        fromYear={searchParams!.fromYear}
+      />
+      <FundamentalAnalytic symbol={params.symbol} />
+    </>
   );
 }

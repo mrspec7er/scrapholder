@@ -3,7 +3,7 @@ import Search from "@/components/search";
 export default async function Page() {
   return (
     <main>
-      <Search />
+      <Search defaultYear={2023} />
     </main>
   );
 }
