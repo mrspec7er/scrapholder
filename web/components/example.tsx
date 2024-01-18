@@ -48,7 +48,7 @@ export default async function Page() {
     <main>
       <StockChart
         labels={labels}
-        datasets={[{ data: closePrices, backgroundColor: "blue" }]}
+        datasets={[{ data: closePrices, borderColor: "blue" }]}
       />
     </main>
   );
