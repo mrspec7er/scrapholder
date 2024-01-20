@@ -10,8 +10,6 @@ COPY . .
 
 RUN go install github.com/zzwx/fresh@latest
 
-RUN fresh -g
-
 EXPOSE 8080
 
 CMD fresh
