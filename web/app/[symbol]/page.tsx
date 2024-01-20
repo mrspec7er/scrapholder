@@ -111,7 +111,8 @@ async function FundamentalAnalytic({ symbol }: { symbol: string }) {
         },
         recommendation{
           title,
-          body
+          body,
+          url
         }
       }
     }
@@ -123,7 +124,7 @@ async function FundamentalAnalytic({ symbol }: { symbol: string }) {
     data: {
       fundamentalAnalytic: {
         statistic: { label: string; value: string }[];
-        recommendation: { title: string; body: string }[];
+        recommendation: { title: string; body: string; url: string }[];
       };
     };
   } = await getClient().query({
@@ -151,10 +152,10 @@ async function FundamentalAnalytic({ symbol }: { symbol: string }) {
         <p className="text-lg font-semibold">Recommendations :</p>
 
         {data.fundamentalAnalytic.recommendation.map((s, i) => (
-          <div className="py-3" key={i}>
+          <a href={s.url} target="_blank" className="py-3" key={i}>
             <p className="pb-1 font-medium">{s.title}</p>
             <p>{s.body}</p>
-          </div>
+          </a>
         ))}
       </div>
     </div>
