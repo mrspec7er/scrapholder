@@ -22,7 +22,9 @@ services:
   web:
     depends_on:
       - api
-    build: ./web
+    build:
+      context: ./web
+      dockerfile: dev.Dockerfile
     container_name: web
     develop:
       watch:
