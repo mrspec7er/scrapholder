@@ -26,6 +26,7 @@ type Statistic struct {
 type Recommendation struct {
 	Title string
 	Body  string
+	URL   string
 }
 
 type StockHistory struct {

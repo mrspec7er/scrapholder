@@ -190,6 +190,9 @@ var stockRecommendationType = graphql.NewObject(graphql.ObjectConfig{
 		"body": &graphql.Field{
 			Type: graphql.String,
 		},
+		"url": &graphql.Field{
+			Type: graphql.String,
+		},
 	},
 })
 

@@ -36,10 +36,16 @@ func (UtilService) InformationScrapper(symbol string) ([]*dto.Statistic, []*dto.
 
 	c.OnHTML(".card-exterior-Us1ZHpvJ", func(e *colly.HTMLElement) {
 
-		title := e.DOM.Find(".title-tkslJwxl").Text()
+		head := e.DOM.Find(".title-tkslJwxl")
 		body := e.DOM.Find(".line-clamp-content-t3qFZvNN").Text()
 
-		recommendation = append(recommendation, &dto.Recommendation{Title: title, Body: body})
+		title := head.Text()
+		url, exist := head.Attr("href")
+
+		if exist {
+			recommendation = append(recommendation, &dto.Recommendation{Title: title, Body: body, URL: url})
+		}
+
 	})
 
 	c.OnRequest(func(r *colly.Request) {
