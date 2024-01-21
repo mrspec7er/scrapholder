@@ -34,6 +34,10 @@ func (s AnalyticService) GetQuarterAnalytic(symbol string, fromYear int) (dto.St
 		quarters = append(quarters, quarter...)
 	}
 
+	if len(quarters) == 0 {
+		return dto.StockQuarterHistories{AverageResistance: 0, AverageSupport: 0, Quarters: []*dto.QuarterHistory{}}, nil
+	}
+
 	sort.Slice(quarters, func(i, j int) bool {
 		return quarters[i].Quarter < quarters[j].Quarter
 	})
