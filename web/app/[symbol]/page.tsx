@@ -89,7 +89,20 @@ async function QuarterAnalytic({
         {formatter.format(data.quarterHistories.averageSupport)}
       </p>
 
-      <QuarterReport symbol={symbol} />
+      <div className="my-3">
+        <QuarterReport symbol={symbol} />
+      </div>
+
+      <div className="flex justify-center gap-7">
+        <div className="flex gap-1 items-center">
+          <div className="rounded-full w-5 h-5 bg-teal-300 border border-black" />
+          <span>Resistance</span>
+        </div>
+        <div className="flex gap-1 items-center">
+          <div className="rounded-full w-5 h-5 bg-pink-300 border border-black" />
+          <span>Support</span>
+        </div>
+      </div>
       <StockChart
         labels={labels}
         datasets={[
