@@ -20,5 +20,4 @@ func Server() {
 	}
 
 	repository.RedisConnection()
-
 }
