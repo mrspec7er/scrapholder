@@ -26,7 +26,7 @@ services:
           ignore:
             - main
         - action: rebuild
-          path: go.mod
+          path: ./api/go.mod
     volumes:
       - assets:/api/assets
 
@@ -45,7 +45,7 @@ services:
           ignore:
             - node_modules/
         - action: rebuild
-          path: package.json
+          path: ./web/package.json
     ports:
       - 3000:3000
 
