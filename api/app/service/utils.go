@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"os"
 	"slices"
 
 	"github.com/gocolly/colly"
@@ -85,8 +86,8 @@ func (u UtilService) GetStockHistory(symbol string, fromDate string, toDate stri
 }
 
 func (u UtilService) GoApiFetchData(symbol string, fromDate string, toDate string) ([]*dto.StockHistory, error) {
-	res, err := http.Get("https://api.goapi.io/stock/idx/" + symbol + "/historical?from=" + fromDate + "&to=" + toDate + "&api_key=cd818a59-52d0-51cd-bd66-fa8c6e45")
-	fmt.Println("https://api.goapi.io/stock/idx/" + symbol + "/historical?from=" + fromDate + "&to=" + toDate + "&api_key=cd818a59-52d0-51cd-bd66-fa8c6e45")
+	res, err := http.Get("https://api.goapi.io/stock/idx/" + symbol + "/historical?from=" + fromDate + "&to=" + toDate + "&api_key=" + os.Getenv("GOAPI_KEY"))
+	fmt.Println("https://api.goapi.io/stock/idx/" + symbol + "/historical?from=" + fromDate + "&to=" + toDate + "&api_key=" + os.Getenv("GOAPI_KEY"))
 
 	if err != nil {
 		return nil, err

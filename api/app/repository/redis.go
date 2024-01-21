@@ -3,6 +3,7 @@ package repository
 import (
 	"context"
 	"encoding/json"
+	"os"
 	"time"
 
 	"github.com/mrspec7er/scrapholder/app/dto"
@@ -14,9 +15,9 @@ type Redis struct{}
 var memcache *redis.Client
 
 func RedisConnection() {
-	redisAddress := "memcache:6379"
-	redisUsername := "default"
-	redisPassword := ""
+	redisAddress := os.Getenv("REDIS_ADDRESS")
+	redisUsername := os.Getenv("REDIS_USERNAME")
+	redisPassword := os.Getenv("REDIS_PASSWORD")
 	memcache = redis.NewClient(&redis.Options{
 		Addr:     redisAddress,
 		Password: redisPassword,
