@@ -46,8 +46,6 @@ services:
             - node_modules/
         - action: rebuild
           path: ./web/package.json
-    ports:
-      - 3000:3000
 
   proxy:
     depends_on:

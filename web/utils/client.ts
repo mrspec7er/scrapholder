@@ -9,7 +9,7 @@ export const { getClient } = registerApolloClient(() => {
   return new NextSSRApolloClient({
     cache: new NextSSRInMemoryCache(),
     link: new HttpLink({
-      uri: "http://proxy:8000/graphql",
+      uri: "http://proxy:8000/api/graphql",
     }),
   });
 });
