@@ -5,12 +5,12 @@ import (
 	"github.com/mrspec7er/scrapholder/app/service"
 )
 
-type TechnicalResolver struct {
+type AnalyticResolver struct {
 	Analytic service.AnalyticService
 	Utils    service.UtilService
 }
 
-var r TechnicalResolver
+var r AnalyticResolver
 
 var rootQuery = graphql.NewObject(graphql.ObjectConfig{
 	Name: "RootQuery",
@@ -196,6 +196,6 @@ var stockRecommendationType = graphql.NewObject(graphql.ObjectConfig{
 	},
 })
 
-var StockTechnicalAnalysisSchema, _ = graphql.NewSchema(graphql.SchemaConfig{
+var StockAnalysisSchema, _ = graphql.NewSchema(graphql.SchemaConfig{
 	Query: rootQuery,
 })

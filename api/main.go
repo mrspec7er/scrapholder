@@ -21,7 +21,7 @@ func main() {
 	repository.RedisConnection()
 
 	h := handler.New(&handler.Config{
-		Schema:   &schema.StockTechnicalAnalysisSchema,
+		Schema:   &schema.StockAnalysisSchema,
 		Pretty:   true,
 		GraphiQL: false,
 	})
