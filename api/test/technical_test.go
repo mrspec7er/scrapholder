@@ -2,6 +2,7 @@ package test
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/http"
 	"net/http/httptest"
 	"testing"
@@ -62,6 +63,54 @@ func TestTechnicalAnalytic(t *testing.T) {
 		assert.True(t, ok, "Expected 'quarters' field in response")
 
 		assert.NotEmpty(t, quarters, "Expected 'quarters' to have at least values")
+	})
+
+	t.Run("should return stock histories", func(t *testing.T) {
+
+		query := `{
+			stockHistories(symbol: "BBRI", fromDate:"2022-01-02", toDate:"2022-01-07") {
+				symbol,
+				date,
+				open,
+				close,
+				high,
+				low,
+				volume
+			}
+		}`
+
+		req, err := http.NewRequest("POST", "/graphql", nil)
+		if err != nil {
+			t.Fatal(err)
+		}
+
+		req.PostForm = map[string][]string{"query": {query}}
+
+		rr := httptest.NewRecorder()
+
+		handler := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			mock.QueryExecutor(w, r)
+		})
+
+		handler.ServeHTTP(rr, req)
+
+		assert.Equal(t, http.StatusOK, rr.Code)
+
+		var result map[string]interface{}
+		err = json.Unmarshal([]byte(rr.Body.String()), &result)
+		if err != nil {
+			t.Fatal(err)
+		}
+
+		data, ok := result["data"].(map[string]interface{})
+		assert.True(t, ok, "Expected 'data' field in response")
+
+		stockHistories, ok := data["stockHistories"].([]interface{})
+		assert.True(t, ok, "Expected 'stockHistories' field in response")
+
+		assert.NotEmpty(t, stockHistories, "Expected 'histories' to have at least values")
+
+		fmt.Println(stockHistories...)
 
 	})
 }
