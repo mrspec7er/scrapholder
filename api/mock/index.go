@@ -1,11 +1,15 @@
 package mock
 
 import (
+	"encoding/json"
+	"net/http"
 	"path/filepath"
 	"runtime"
 
+	"github.com/graphql-go/graphql"
 	"github.com/joho/godotenv"
 	"github.com/mrspec7er/scrapholder/app/repository"
+	"github.com/mrspec7er/scrapholder/app/schema"
 )
 
 var (
@@ -20,4 +24,15 @@ func Server() {
 	}
 
 	repository.RedisConnection()
+}
+
+func QueryExecutor(w http.ResponseWriter, r *http.Request) {
+	params := graphql.Params{
+		Schema:        schema.StockAnalysisSchema,
+		RequestString: r.FormValue("query"),
+	}
+
+	result := graphql.Do(params)
+
+	json.NewEncoder(w).Encode(result)
 }
