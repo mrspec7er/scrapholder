@@ -10,6 +10,8 @@ COPY . .
 
 RUN go build main.go
 
+RUN go test -v ./test
+
 RUN chmod +x main
 
 EXPOSE 8080
