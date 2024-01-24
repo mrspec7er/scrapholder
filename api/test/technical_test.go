@@ -2,7 +2,6 @@ package test
 
 import (
 	"encoding/json"
-	"fmt"
 	"net/http"
 	"net/http/httptest"
 	"testing"
@@ -62,7 +61,7 @@ func TestTechnicalAnalytic(t *testing.T) {
 		quarters, ok := quarterHistories["quarters"].([]interface{})
 		assert.True(t, ok, "Expected 'quarters' field in response")
 
-		assert.NotEmpty(t, quarters, "Expected 'quarters' to have at least values")
+		assert.NotEmpty(t, quarters, "Expected 'quarters' to have at least one value")
 	})
 
 	t.Run("should return stock histories", func(t *testing.T) {
@@ -108,9 +107,6 @@ func TestTechnicalAnalytic(t *testing.T) {
 		stockHistories, ok := data["stockHistories"].([]interface{})
 		assert.True(t, ok, "Expected 'stockHistories' field in response")
 
-		assert.NotEmpty(t, stockHistories, "Expected 'histories' to have at least values")
-
-		fmt.Println(stockHistories...)
-
+		assert.NotEmpty(t, stockHistories, "Expected 'histories' to have at least one value")
 	})
 }
