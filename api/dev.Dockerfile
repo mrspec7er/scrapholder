@@ -8,8 +8,6 @@ RUN go mod download
 
 COPY . .
 
-RUN go test -v ./test
-
 RUN go install github.com/zzwx/fresh@latest
 
 EXPOSE 8080

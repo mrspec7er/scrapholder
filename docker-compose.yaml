@@ -29,6 +29,11 @@ services:
           path: ./api/go.mod
     volumes:
       - assets:/api/assets
+    healthcheck:
+      test: ["CMD", "go", "test", "./test"]
+      interval: 1s
+      timeout: 300s
+      retries: 1
 
   web:
     depends_on:
@@ -47,6 +52,8 @@ services:
             - node_modules/
         - action: rebuild
           path: ./web/package.json
+    ports:
+      - 3000:3000
 
   proxy:
     depends_on:
