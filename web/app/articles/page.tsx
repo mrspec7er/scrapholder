@@ -3,10 +3,15 @@
 import { useEffect, useState } from "react";
 
 const Articles = () => {
-  const [articles, setArticles] =
-    useState<
-      Array<{ _source: { title: string; attachment: { content: string } } }>
-    >();
+  const [articles, setArticles] = useState<
+    Array<{
+      _source: {
+        title: string;
+        attachment: { content: string };
+        data: string;
+      };
+    }>
+  >();
   useEffect(() => {
     fetch("http://localhost:9200/articles/_search", {
       method: "POST",
@@ -15,7 +20,7 @@ const Articles = () => {
         Authorization: "Basic " + btoa("elastic:mrc201"),
       },
       body: JSON.stringify({
-        _source: ["title", "attachment"],
+        _source: ["title", "attachment", "data"],
         query: {
           match_phrase: {
             "attachment.content": "WhicH",
@@ -30,13 +35,19 @@ const Articles = () => {
       .catch((err) => console.log(err));
   }, []);
 
+  function downloadPDF(pdf: string) {
+    const linkSource = `data:application/pdf;base64,${pdf}`;
+    return linkSource;
+  }
+
   return (
     <div>
       <p>Articles</p>
       {articles?.map((a, n) => (
         <div>
-          <p>{a._source.title}</p>
-          <p>{a._source.attachment.content}</p>
+          <a download={a._source.title} href={downloadPDF(a._source.data)}>
+            {a._source.title}
+          </a>
         </div>
       ))}
     </div>
