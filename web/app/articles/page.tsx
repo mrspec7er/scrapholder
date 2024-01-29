@@ -13,6 +13,8 @@ const Articles = () => {
     }>
   >();
   const [articleEntries, setArticleEntries] = useState<File>();
+  const [keyword, setKeyword] = useState("");
+  const [search, setSearch] = useState(0);
   useEffect(() => {
     fetch("http://localhost:9200/articles/_search", {
       method: "POST",
@@ -24,7 +26,7 @@ const Articles = () => {
         _source: ["title", "attachment", "data"],
         query: {
           match_phrase: {
-            "attachment.content": "simple",
+            "attachment.content": keyword,
           },
         },
       }),
@@ -34,7 +36,7 @@ const Articles = () => {
         setArticles(result.hits.hits);
       })
       .catch((err) => console.log(err));
-  }, []);
+  }, [search]);
 
   function downloadPDF(pdf: string) {
     const linkSource = `data:application/pdf;base64,${pdf}`;
@@ -91,6 +93,8 @@ const Articles = () => {
       </div>
       <div>
         <p>Articles</p>
+        <input type="search" onChange={(e) => setKeyword(e.target.value)} />
+        <button onClick={() => setSearch((v) => v + 1)}>Submit</button>
         {articles?.map((a, n) => (
           <div key={n}>
             <a download={a._source.title} href={downloadPDF(a._source.data)}>
