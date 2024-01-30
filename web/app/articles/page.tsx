@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import { getArticle, postArticle } from "./service";
 
 const Articles = () => {
   const [articles, setArticles] = useState<
@@ -13,30 +14,12 @@ const Articles = () => {
     }>
   >();
   const [articleEntries, setArticleEntries] = useState<File>();
+  const [titleEntries, setTitleEntries] = useState("");
   const [keyword, setKeyword] = useState("");
-  const [search, setSearch] = useState(0);
-  useEffect(() => {
-    fetch("http://localhost:9200/articles/_search", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: "Basic " + btoa("elastic:mrc201"),
-      },
-      body: JSON.stringify({
-        _source: ["title", "attachment", "data"],
-        query: {
-          match_phrase: {
-            "attachment.content": keyword,
-          },
-        },
-      }),
-    })
-      .then((res) => res.json())
-      .then((result) => {
-        setArticles(result.hits.hits);
-      })
-      .catch((err) => console.log(err));
-  }, [search]);
+
+  async function search(keyword: string) {
+    setArticles(await getArticle(keyword));
+  }
 
   function downloadPDF(pdf: string) {
     const linkSource = `data:application/pdf;base64,${pdf}`;
@@ -50,32 +33,11 @@ const Articles = () => {
   }
 
   function handleSubmit() {
-    console.log("ENTRIES", articleEntries);
     if (articleEntries) {
       var reader = new FileReader();
       reader.readAsDataURL(articleEntries);
       reader.onload = function () {
-        console.log((reader.result as string).split("base64,")[1]);
-
-        fetch(
-          `http://localhost:9200/articles/_doc/${"TESTINGS"}?pipeline=files`,
-          {
-            method: "PUT",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: "Basic " + btoa("elastic:mrc201"),
-            },
-            body: JSON.stringify({
-              title: "TESTINGS ARTICLE",
-              data: (reader.result as string).split("base64,")[1],
-            }),
-          }
-        )
-          .then((res) => res.json())
-          .then((result) => {
-            console.log(result);
-          })
-          .catch((err) => console.log(err));
+        postArticle(articleEntries.name, titleEntries, reader.result as string);
       };
       reader.onerror = function (error) {
         throw new Error("Error: " + error);
@@ -87,14 +49,23 @@ const Articles = () => {
     <div>
       <div>
         <input onChange={(e) => handleUploadFile(e.target.files)} type="file" />
+        <input
+          placeholder="Input Title"
+          onChange={(e) => setTitleEntries(e.target.value)}
+          type="text"
+        />
         <button type="button" onClick={() => handleSubmit()}>
           Submit
         </button>
       </div>
       <div>
         <p>Articles</p>
-        <input type="search" onChange={(e) => setKeyword(e.target.value)} />
-        <button onClick={() => setSearch((v) => v + 1)}>Submit</button>
+        <input
+          type="search"
+          placeholder="Search"
+          onChange={(e) => setKeyword(e.target.value)}
+        />
+        <button onClick={() => search(keyword)}>Submit</button>
         {articles?.map((a, n) => (
           <div key={n}>
             <a download={a._source.title} href={downloadPDF(a._source.data)}>
