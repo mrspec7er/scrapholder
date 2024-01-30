@@ -10,6 +10,13 @@ services:
       timeout: 25s
       retries: 5
 
+  elastic:
+    build: ./elastic
+    container_name: es01
+    ports:
+      - 9200:9200
+      - 9300:9300
+
   api:
     depends_on:
       memcache:
