@@ -9,6 +9,8 @@ ENV http.cors.enabled=true
 ENV http.cors.allow-headers=X-Requested-With,X-Auth-Token,Content-Type,Content-Length,Authorization
 ENV http.cors.allow-credentials=true
 
+COPY . .
+
 EXPOSE 9200
 EXPOSE 9300
 
