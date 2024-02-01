@@ -19,9 +19,6 @@ services:
       interval: 20s
       timeout: 30s
       retries: 1
-    ports:
-      - 9200:9200
-      - 9300:9300
 
   api:
     depends_on:
