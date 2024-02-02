@@ -19,6 +19,8 @@ services:
       interval: 20s
       timeout: 30s
       retries: 1
+    volumes:
+      - articles:/usr/share/elasticsearch/data
 
   api:
     depends_on:
@@ -78,3 +80,4 @@ services:
 
 volumes:
   assets:
+  articles:
