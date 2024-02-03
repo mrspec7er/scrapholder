@@ -38,6 +38,7 @@ const Articles = () => {
       reader.readAsDataURL(articleEntries);
       reader.onload = function () {
         postArticle(articleEntries.name, titleEntries, reader.result as string);
+        setTitleEntries("");
       };
       reader.onerror = function (error) {
         throw new Error("Error: " + error);
@@ -50,6 +51,7 @@ const Articles = () => {
       <div>
         <input onChange={(e) => handleUploadFile(e.target.files)} type="file" />
         <input
+          value={titleEntries}
           placeholder="Input Title"
           onChange={(e) => setTitleEntries(e.target.value)}
           type="text"
@@ -58,12 +60,14 @@ const Articles = () => {
           Submit
         </button>
       </div>
-      <div>
-        <p>Articles</p>
+      <div className="pt-10">
         <input
           type="search"
           placeholder="Search"
           onChange={(e) => setKeyword(e.target.value)}
+          onKeyDown={(e) => {
+            e.key === "Enter" ? search(keyword) : null;
+          }}
         />
         <button onClick={() => search(keyword)}>Submit</button>
         {articles?.map((a, n) => (
