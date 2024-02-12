@@ -155,7 +155,7 @@ async function FundamentalAnalytic({ symbol }: { symbol: string }) {
         <p className="text-lg font-medium pb-2">Statistic :</p>
         <div className="flex justify-between w-full flex-wrap">
           {data.fundamentalAnalytic.statistic.map((s) => (
-            <div className="w-1/3" key={s.label}>
+            <div className="md:w-1/3 w-1/2" key={s.label}>
               <p>
                 <span className="font-medium w-[30%]">{s.label}</span>:{" "}
                 {s.value}
