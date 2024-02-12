@@ -152,25 +152,25 @@ async function FundamentalAnalytic({ symbol }: { symbol: string }) {
   return (
     <div>
       <div className="pt-12">
-        <p className="text-lg font-semibold pb-2">Statistic :</p>
+        <p className="text-lg font-medium pb-2">Statistic :</p>
         <div className="flex justify-between w-full flex-wrap">
           {data.fundamentalAnalytic.statistic.map((s) => (
             <div className="w-1/3" key={s.label}>
               <p>
-                <span className="font-semibold w-[30%]">{s.label}</span>:{" "}
+                <span className="font-medium w-[30%]">{s.label}</span>:{" "}
                 {s.value}
               </p>
             </div>
           ))}
         </div>
       </div>
-      <p className="text-lg font-semibold pt-12 pb-2">Recommendations :</p>
+      <p className="text-lg font-medium pt-12 pb-2">Recommendations :</p>
       <div className="overflow-auto">
         <div className="flex justify-between w-[80vw] gap-3">
           {data.fundamentalAnalytic.recommendation.map((s, i) => (
             <div className="w-72">
               <a href={s.url} target="_blank" className="py-3" key={i}>
-                <p className="pb-1 font-semibold ">{s.title}</p>
+                <p className="pb-1 font-medium ">{s.title}</p>
                 <p className="w-72">{s.body}</p>
               </a>
             </div>
