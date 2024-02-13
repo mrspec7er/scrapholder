@@ -16,9 +16,9 @@ services:
     healthcheck:
       test:
         ["CMD", "curl", "-f", "-u", "elastic:mrc201", "http://localhost:9200"]
-      interval: 20s
+      interval: 10s
       timeout: 30s
-      retries: 1
+      retries: 3
     volumes:
       - articles:/usr/share/elasticsearch/data
 
