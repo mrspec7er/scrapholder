@@ -19,6 +19,7 @@ const Articles = () => {
 
   async function search(keyword: string) {
     setArticles(await getArticle(keyword));
+    setKeyword("");
   }
 
   function downloadPDF(pdf: string) {
@@ -64,6 +65,7 @@ const Articles = () => {
         <input
           type="search"
           placeholder="Search"
+          value={keyword}
           onChange={(e) => setKeyword(e.target.value)}
           onKeyDown={(e) => {
             e.key === "Enter" ? search(keyword) : null;
