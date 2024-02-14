@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { getArticle, postArticle } from "./service";
+import UploadArticleModal from "@/components/upload-article";
 
 const Articles = () => {
   const [articles, setArticles] = useState<
@@ -49,18 +50,12 @@ const Articles = () => {
 
   return (
     <div>
-      <div>
-        <input onChange={(e) => handleUploadFile(e.target.files)} type="file" />
-        <input
-          value={titleEntries}
-          placeholder="Input Title"
-          onChange={(e) => setTitleEntries(e.target.value)}
-          type="text"
-        />
-        <button type="button" onClick={() => handleSubmit()}>
-          Submit
-        </button>
-      </div>
+      <UploadArticleModal
+        handleSubmit={handleSubmit}
+        handleUploadFile={handleUploadFile}
+        setTitleEntries={setTitleEntries}
+        titleEntries={titleEntries}
+      />
       <div className="pt-10">
         <input
           type="search"
