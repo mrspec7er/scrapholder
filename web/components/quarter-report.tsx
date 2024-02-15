@@ -63,15 +63,17 @@ const QuarterReportModal = ({ symbol }: { symbol: string }) => {
           className="overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full"
         >
           <div className="flex justify-center w-full h-full items-center bg-black bg-opacity-30">
-            <div className="h-[30vh] min-w-[30vw] bg-slate-100 p-5">
+            <div className="h-[30vh] min-w-[30vw] bg-slate-100 p-5 flex flex-col justify-between">
               <QuarterReport symbol={symbol} />
-              <button
-                type="button"
-                className="text-black"
-                onClick={() => setOpenModal(false)}
-              >
-                CLOSE
-              </button>
+              <div className="w-ful flex justify-center">
+                <button
+                  type="button"
+                  className="text-black"
+                  onClick={() => setOpenModal(false)}
+                >
+                  CLOSE
+                </button>
+              </div>
             </div>
           </div>
         </div>
